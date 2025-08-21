@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wurzelsepp Rechner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #1c2b3a;
+      color: #fff;
+    }
+
+    header {
+      background-color: #00bfff;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .card {
+      background-color: #243547;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .label-row input {
+      width: 80px;
+      padding: 5px;
+      background-color: #1c2b3a;
+      color: #fff;
+      border: 1px solid #00bfff;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    input[type=range] {
+      width: 100%;
+      margin: 15px 0;
+    }
+
+    .result {
+      margin: 20px 0;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      background-color: #00bfff;
+      color: #000;
+      text-align: center;
+      padding: 12px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background-color: #0099cc;
+    }
+  </style>
+</head>
+<body>
+  <header>Wurzelsepp Rechner</header>
+  <div class="container">
+    
+    <!-- Anzahl Füße -->
+    <div class="card">
+      <div class="label-row">
+        <span>Anzahl Füße im Pool</span>
+        <input type="number" id="fuesseValue" min="0" max="40" value="5" oninput="updateFromInput('fuesse')">
+      </div>
+      <input type="range" id="fuesse" min="0" max="40" value="5" oninput="updateFromSlider('fuesse')">
+    </div>
+
+    <!-- Liter im Pool -->
+    <div class="card">
+      <div class="label-row">
+        <span>Liter im Pool</span>
+        <input type="number" id="literValue" min="0" max="50000" value="1000" oninput="updateFromInput('liter')">
+      </div>
+      <input type="range" id="liter" min="0" max="50000" value="1000" oninput="updateFromSlider('liter')">
+    </div>
+
+    <!-- Trichteranzahl -->
+    <div class="card">
+      <div class="label-row">
+        <span>Trichteranzahl</span>
+        <input type="number" id="trichterValue" min="0" max="100" value="3" oninput="updateFromInput('trichter')">
+      </div>
+      <input type="range" id="trichter" min="0" max="100" value="3" oninput="updateFromSlider('trichter')">
+    </div>
+
+    <!-- Ergebnisse -->
+    <div class="result">
+      <p>Sie haben: <span id="schmidla">0</span> Schmidlas</p>
+      <p>Sie haben: <span id="wurzelsepp">0</span> Wurzelsepp</p>
+    </div>
+
+    <!-- Button -->
+    <a href="Car.html" class="button" onclick="goToAuto()">Mehr Angaben</a>
+  </div>
+
+  <script>
+
+    function calculate() {
+      // Werte auslesen
+      let fuesse = parseFloat(document.getElementById("fuesse").value);
+      let liter = parseFloat(document.getElementById("liter").value);
+      let trichter = parseFloat(document.getElementById("trichter").value);
+
+      // Schmidlas berechnen: Füße pro 1000 Liter
+      let schmidlas = fuesse / (liter / 1000);
+      schmidlas = Math.round(schmidlas * 100) / 100; // auf 2 Nachkommastellen runden
+
+      // Wurzelsepp berechnen: Trichter / Schmidlas
+      let wurzelsepp = schmidlas !== 0 ? trichter / schmidlas : 0;
+      wurzelsepp = Math.round(wurzelsepp * 100) / 100; // auf 2 Nachkommastellen runden
+
+      // Ergebnisse in HTML schreiben (mit deutschem Komma)
+      document.getElementById("schmidla").textContent = schmidlas.toString().replace('.', ',');
+      document.getElementById("wurzelsepp").textContent = wurzelsepp.toString().replace('.', ',');
+    }
+    function goToAuto() {
+  // Werte speichern
+  localStorage.setItem("fuesse", document.getElementById("fuesse").value);
+  localStorage.setItem("liter", document.getElementById("liter").value);
+  localStorage.setItem("trichter", document.getElementById("trichter").value);
+  // Weiterleiten zur zweiten Seite
+  window.location.href = "Auto.html";
+    }
+    // Slider → Input-Feld anpassen & berechnen
+    function updateFromSlider(id) {
+      let slider = document.getElementById(id);
+      let input = document.getElementById(id + "Value");
+      input.value = slider.value;
+      calculate();
+    }
+
+    // Input → Slider anpassen & berechnen
+    function updateFromInput(id) {
+      let slider = document.getElementById(id);
+      let input = document.getElementById(id + "Value");
+      if (parseFloat(input.value) > slider.max) input.value = slider.max;
+      if (parseFloat(input.value) < slider.min) input.value = slider.min;
+      slider.value = input.value;
+      calculate();
+    }
+
+    // Initial berechnen
+    calculate();
+  </script>
+</body>
+</html>
