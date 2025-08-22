@@ -7,36 +7,89 @@
   <style>
     body {
       margin: 0;
-      background-color: #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #1c2b3a;
       color: #fff;
       font-family: Arial, sans-serif;
       text-align: center;
     }
-    video {
-      max-width: 100%;
-      max-height: 80%;
-      margin-top: 20px;
+
+    /* Navigation */
+    nav {
+      background-color: #00bfff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
+    nav a {
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
     .status-text {
       font-size: 1.8em;
       margin-bottom: 15px;
       color: #00bfff;
     }
+
+    video {
+      width: 100%;
+      max-height: 400px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      padding: 12px 25px;
+      font-size: 1em;
+      font-weight: bold;
+      background-color: #00bfff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #0099cc;
+    }
   </style>
 </head>
 <body>
 
-  <div class="status-text" id="statusText"></div>
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Startseite</a>
+    <a href="counter.html">Trichter Counter</a>
+    <a href="autofahren.html">Autofahren</a>
+  </nav>
 
-  <video autoplay controls id="videoPlayer">
-    <source src="" type="video/mp4">
-    Dein Browser unterstützt dieses Videoformat nicht.
-  </video>
+  <div class="container">
+    <!-- Statusanzeige -->
+    <div class="status-text" id="statusText"></div>
+
+    <!-- Video -->
+    <video autoplay controls id="videoPlayer">
+      <source src="" type="video/mp4">
+      Dein Browser unterstützt dieses Videoformat nicht.
+    </video>
+
+    <!-- Button zurück zur Startseite -->
+    <button class="button" onclick="window.location.href='index.html'">Zur Startseite</button>
+  </div>
 
   <script>
     // Wurzelsepp aus localStorage holen
@@ -47,15 +100,15 @@
     if (wurzelsepp <= 5) {
       // Autofahren erlaubt
       statusText.textContent = "Du darfst fahren!";
-      videoPlayer.src = "video_driver.mp4"; // Video für Autofahren
+      videoPlayer.src = "video_driver.mp4";
     } else {
-      // Autofahren nicht erlaubt, Wartezeit berechnen
-      let waitHours = Math.round((wurzelsepp - 5) * 10 * 100) / 100; // auf 2 Nachkommastellen
+      // Autofahren nicht erlaubt
+      let waitHours = Math.round((wurzelsepp - 5) * 10 * 100) / 100; // 2 Nachkommastellen
       statusText.textContent = "Du musst noch: " + waitHours + " Stunden warten";
-      videoPlayer.src = "video_nodriver.mp4"; // Video für Nicht-Autofahren
+      videoPlayer.src = "video_nodriver.mp4";
     }
 
-    // Video neu laden, nachdem src gesetzt wurde
+    // Video neu laden
     videoPlayer.load();
   </script>
 

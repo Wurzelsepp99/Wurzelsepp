@@ -1,204 +1,155 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kann ich noch Auto fahren</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #1c2b3a;
-      color: #fff;
-    }
-
-    header {
-      background-color: #00bfff;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-
-    .container {
-      padding: 20px;
-      max-width: 500px;
-      margin: auto;
-    }
-
-    .card {
-      background-color: #243547;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .label-row span {
-      background-color: #1c2b3a;
-      padding: 5px 10px;
-      border: 1px solid #00bfff;
-      border-radius: 6px;
-    }
-
-    input[type=range] {
-      width: 100%;
-      margin: 15px 0;
-    }
-
-    .result {
-      margin: 20px 0;
-      font-size: 1.2em;
-      text-align: center;
-    }
-
-    .button {
-      display: block;
-      width: 100%;
-      background-color: #00bfff;
-      color: #000;
-      text-align: center;
-      padding: 12px;
-      font-size: 1.1em;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .button:hover {
-      background-color: #0099cc;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kann ich noch Auto fahren</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; background-color:#1c2b3a; color:#fff; }
+  header { background-color:#00bfff; padding:15px; text-align:center; font-size:1.5em; font-weight:bold; position:sticky; top:0; z-index:1000; }
+  nav { display:flex; justify-content:center; background-color:#243547; gap:20px; padding:10px 0; position:sticky; top:60px; z-index:1000; }
+  nav a { color:#fff; text-decoration:none; font-weight:bold; padding:6px 12px; border-radius:6px; }
+  nav a:hover { background-color:#00bfff; color:#000; }
+  .container { padding:20px; max-width:500px; margin:auto; }
+  .counter-card { background-color:#00bfff; color:#000; padding:10px 20px; border-radius:8px; font-weight:bold; text-align:center; margin-bottom:20px; }
+  .card { background-color:#243547; padding:15px; border-radius:12px; margin-bottom:20px; }
+  .label-row { display:flex; justify-content:space-between; align-items:center; }
+  input[type=range] { width:100%; margin:15px 0; }
+  .result { margin:20px 0; font-size:1.2em; text-align:center; }
+  .button { display:block; width:100%; background-color:#00bfff; color:#000; text-align:center; padding:12px; font-size:1.1em; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
+  .button:hover { background-color:#0099cc; }
+</style>
 </head>
 <body>
-  <header>Kann ich noch Auto fahren</header>
-  <div class="container">
-    
-    <!-- Höhenmeter -->
-    <div class="card">
-      <div class="label-row">
-        <span>Höhenmeter über NN [m]</span>
-        <span id="hoeheValue">1000</span>
-      </div>
-      <input type="range" id="hoehe" min="0" max="10000" value="1000" oninput="updateValues()">
-    </div>
+<header>Kann ich noch Auto fahren</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="Car.html">Auto fahren</a>
+  <a href="counter.html">Trichtercounter</a>
+</nav>
 
-    <!-- Alkoholgehalt -->
-    <div class="card">
-      <div class="label-row">
-        <span>Alkoholgehalt der Mische [%]</span>
-        <span id="alkoholValue">10</span>
-      </div>
-      <input type="range" id="alkohol" min="0" max="100" value="10" oninput="updateValues()">
-    </div>
+<div class="container">
 
-    <!-- Temperatur -->
-    <div class="card">
-      <div class="label-row">
-        <span>Temperatur [°C]</span>
-        <span id="tempValue">26</span>
-      </div>
-      <input type="range" id="temp" min="-20" max="50" value="26" oninput="updateValues()">
-    </div>
-
-    <!-- Pool-Werte -->
-    <div class="card">
-      <div class="label-row">
-        <span>Trichteranzahl</span>
-        <span id="trichterValue">3</span>
-      </div>
-      <input type="range" id="trichter" min="0" max="100" value="3" oninput="updateValues()">
-    </div>
-
-    <div class="card">
-      <div class="label-row">
-        <span>Füße im Pool</span>
-        <span id="fuesseValue">5</span>
-      </div>
-      <input type="range" id="fuesse" min="0" max="40" value="5" oninput="updateValues()">
-    </div>
-
-    <div class="card">
-      <div class="label-row">
-        <span>Liter im Pool</span>
-        <span id="literValue">1000</span>
-      </div>
-      <input type="range" id="liter" min="0" max="50000" value="1000" oninput="updateValues()">
-    </div>
-
-    <!-- Ergebnisse -->
-    <div class="result">
-      <p>Sie haben: <span id="druck">0,00</span> Bar Luftdruck</p>
-      <p>Sie haben: <span id="wurzelsepp">0,00</span> Wurzelsepp</p>
-    </div>
-
-    <!-- Button -->
-    <button class="button" onclick="goToAutofahren()">Mehr Angaben</button>
+  <!-- Sticky Trichter Counter aus counter.html -->
+  <div class="counter-card">
+    Trichter vom Counter: <span id="stickyTrichter">0</span>
   </div>
 
-  <script>
-    function updateValues() {
-      // Slider-Werte auslesen
-      let hoehe = parseFloat(document.getElementById("hoehe").value);
-      let alkohol = parseFloat(document.getElementById("alkohol").value);
-      let temp = parseFloat(document.getElementById("temp").value);
-      let fuesse = parseFloat(document.getElementById("fuesse").value);
-      let liter = parseFloat(document.getElementById("liter").value);
-      let trichter = parseFloat(document.getElementById("trichter").value);
+  <!-- Höhenmeter -->
+  <div class="card">
+    <div class="label-row">
+      <label for="hoehe">Höhenmeter über NN [m]</label>
+      <span id="hoeheValue">1000</span>
+    </div>
+    <input type="range" id="hoehe" min="0" max="10000" value="1000" oninput="updateValues()">
+  </div>
 
-      // Werte in Labels anzeigen
-      document.getElementById("hoeheValue").textContent = hoehe;
-      document.getElementById("alkoholValue").textContent = alkohol;
-      document.getElementById("tempValue").textContent = temp;
-      document.getElementById("fuesseValue").textContent = fuesse;
-      document.getElementById("literValue").textContent = liter;
-      document.getElementById("trichterValue").textContent = trichter;
+  <!-- Alkoholgehalt -->
+  <div class="card">
+    <div class="label-row">
+      <label for="alkohol">Alkoholgehalt der Mische [%]</label>
+      <span id="alkoholValue">10</span>
+    </div>
+    <input type="range" id="alkohol" min="0" max="100" value="10" oninput="updateValues()">
+  </div>
 
-      // Schmidlas berechnen
-      let schmidlas = fuesse / (liter / 1000);
-      schmidlas = Math.round(schmidlas * 100) / 100;
+  <!-- Temperatur -->
+  <div class="card">
+    <div class="label-row">
+      <label for="temp">Temperatur [°C]</label>
+      <span id="tempValue">26</span>
+    </div>
+    <input type="range" id="temp" min="-20" max="50" value="26" oninput="updateValues()">
+  </div>
 
-      // Luftdruck berechnen
-      let druck = 1013.25 * Math.pow(1 - (6.5 * hoehe) / 288150, 5.255) / 1000;
-      druck = Math.round(druck * 100) / 100;
+  <!-- Füße im Pool -->
+  <div class="card">
+    <div class="label-row">
+      <label for="fuesse">Füße im Pool</label>
+      <span id="fuesseValue">5</span>
+    </div>
+    <input type="range" id="fuesse" min="0" max="40" value="5" oninput="updateValues()">
+  </div>
 
-      // Wurzelsepp berechnen
-      let wurzelsepp = 0;
-      if (schmidlas !== 0 && druck !== 0) {
-        wurzelsepp = (trichter / schmidlas) * (alkohol / 10) * (1 / druck) * ((273.15 + temp) / 293.15);
-        wurzelsepp = Math.round(wurzelsepp * 100) / 100;
-      }
+  <!-- Liter im Pool -->
+  <div class="card">
+    <div class="label-row">
+      <label for="liter">Liter im Pool</label>
+      <span id="literValue">1000</span>
+    </div>
+    <input type="range" id="liter" min="0" max="50000" value="1000" oninput="updateValues()">
+  </div>
 
-      // Ergebnisse anzeigen
-      document.getElementById("druck").textContent = druck.toFixed(2).replace('.', ',');
-      document.getElementById("wurzelsepp").textContent = wurzelsepp.toFixed(2).replace('.', ',');
+  <!-- Trichteranzahl -->
+  <div class="card">
+    <div class="label-row">
+      <label for="trichter">Trichteranzahl</label>
+      <span id="trichterValue">3</span>
+    </div>
+    <input type="range" id="trichter" min="0" max="100" value="3" oninput="updateValues()">
+  </div>
 
-      // Wurzelsepp in localStorage speichern
-      localStorage.setItem("wurzelsepp", wurzelsepp);
-    }
+  <!-- Ergebnisse -->
+  <div class="result">
+    <p>Sie haben: <span id="druck">0,00</span> Bar Luftdruck</p>
+    <p>Sie haben: <span id="wurzelsepp">0,00</span> Wurzelsepp</p>
+  </div>
 
-    // Button-Funktion zur neuen Seite
-    function goToAutofahren() {
-      // Slider-Werte in localStorage speichern
-      localStorage.setItem("fuesse", document.getElementById("fuesse").value);
-      localStorage.setItem("liter", document.getElementById("liter").value);
-      localStorage.setItem("trichter", document.getElementById("trichter").value);
-      localStorage.setItem("hoehe", document.getElementById("hoehe").value);
-      localStorage.setItem("alkohol", document.getElementById("alkohol").value);
-      localStorage.setItem("temp", document.getElementById("temp").value);
+  <button class="button" onclick="goToVideo()">Zur Video-Seite</button>
 
-      // Weiterleitung zur gemeinsamen Autofahren-Seite
-      window.location.href = "autofahren.html";
-    }
+</div>
 
-    // Initialberechnung beim Laden
-    updateValues();
-  </script>
+<script>
+function updateValues() {
+  let hoehe = parseFloat(document.getElementById("hoehe").value);
+  let alkohol = parseFloat(document.getElementById("alkohol").value);
+  let temp = parseFloat(document.getElementById("temp").value);
+  let fuesse = parseFloat(document.getElementById("fuesse").value);
+  let liter = parseFloat(document.getElementById("liter").value);
+  let trichter = parseFloat(document.getElementById("trichter").value);
+
+  document.getElementById("hoeheValue").textContent = hoehe;
+  document.getElementById("alkoholValue").textContent = alkohol;
+  document.getElementById("tempValue").textContent = temp;
+  document.getElementById("fuesseValue").textContent = fuesse;
+  document.getElementById("literValue").textContent = liter;
+  document.getElementById("trichterValue").textContent = trichter;
+
+  let schmidlas = fuesse / (liter / 1000);
+  schmidlas = Math.round(schmidlas * 100) / 100;
+
+  let druck = 1013.25 * Math.pow(1 - (6.5 * hoehe) / 288150, 5.255) / 1000;
+  druck = Math.round(druck * 100) / 100;
+
+  let wurzelsepp = 0;
+  if (schmidlas !== 0 && druck !== 0) {
+    wurzelsepp = (trichter / schmidlas) * (alkohol / 10) * (1 / druck) * ((273.15 + temp) / 293.15);
+    wurzelsepp = Math.round(wurzelsepp * 100) / 100;
+  }
+
+  document.getElementById("druck").textContent = druck.toFixed(2).replace('.', ',');
+  document.getElementById("wurzelsepp").textContent = wurzelsepp.toFixed(2).replace('.', ',');
+
+  localStorage.setItem("wurzelsepp", wurzelsepp);
+}
+
+function goToVideo() {
+  localStorage.setItem("fuesse", document.getElementById("fuesse").value);
+  localStorage.setItem("liter", document.getElementById("liter").value);
+  localStorage.setItem("trichter", document.getElementById("trichter").value);
+  localStorage.setItem("hoehe", document.getElementById("hoehe").value);
+  localStorage.setItem("alkohol", document.getElementById("alkohol").value);
+  localStorage.setItem("temp", document.getElementById("temp").value);
+  window.location.href = "autofahren.html";
+}
+
+// Trichtercounter aus counter.html laden
+window.onload = function() {
+  let savedCounter = localStorage.getItem("trichterCounter") || 0;
+  document.getElementById("stickyTrichter").textContent = savedCounter;
+  updateValues();
+};
+</script>
+
 </body>
 </html>
