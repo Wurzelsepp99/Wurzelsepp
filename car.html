@@ -13,7 +13,16 @@
   .container { padding:20px; max-width:500px; margin:auto; }
   .counter-card { background-color:#00bfff; color:#000; padding:10px 20px; border-radius:8px; font-weight:bold; text-align:center; margin-bottom:20px; }
   .card { background-color:#243547; padding:15px; border-radius:12px; margin-bottom:20px; }
-  .label-row { display:flex; justify-content:space-between; align-items:center; }
+  .label-row { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .label-row input[type=number] {
+    width: 90px;
+    padding: 5px;
+    background-color: #1c2b3a;
+    color: #fff;
+    border: 1px solid #00bfff;
+    border-radius: 6px;
+    text-align: center;
+  }
   input[type=range] { width:100%; margin:15px 0; }
   .result { margin:20px 0; font-size:1.2em; text-align:center; }
   .button { display:block; width:100%; background-color:#00bfff; color:#000; text-align:center; padding:12px; font-size:1.1em; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
@@ -30,63 +39,63 @@
 
 <div class="container">
 
-  <!-- Sticky Trichter Counter aus counter.html -->
+  <!-- Sticky Trichter Counter -->
   <div class="counter-card">
-    Trichter vom Counter: <span id="stickyTrichter">0</span>
+    Trichter-Counter: <span id="stickyTrichter">0</span>
   </div>
 
   <!-- Höhenmeter -->
   <div class="card">
     <div class="label-row">
-      <label for="hoehe">Höhenmeter über NN [m]</label>
-      <span id="hoeheValue">1000</span>
+      <label for="hoeheValue">Höhenmeter über NN [m]</label>
+      <input type="number" id="hoeheValue" min="0" max="10000">
     </div>
-    <input type="range" id="hoehe" min="0" max="10000" value="1000" oninput="updateValues()">
+    <input type="range" id="hoehe" min="0" max="10000" oninput="syncInput('hoehe')">
   </div>
 
   <!-- Alkoholgehalt -->
   <div class="card">
     <div class="label-row">
-      <label for="alkohol">Alkoholgehalt der Mische [%]</label>
-      <span id="alkoholValue">10</span>
+      <label for="alkoholValue">Alkoholgehalt der Mische [%]</label>
+      <input type="number" id="alkoholValue" min="0" max="100">
     </div>
-    <input type="range" id="alkohol" min="0" max="100" value="10" oninput="updateValues()">
+    <input type="range" id="alkohol" min="0" max="100" oninput="syncInput('alkohol')">
   </div>
 
   <!-- Temperatur -->
   <div class="card">
     <div class="label-row">
-      <label for="temp">Temperatur [°C]</label>
-      <span id="tempValue">26</span>
+      <label for="tempValue">Temperatur [°C]</label>
+      <input type="number" id="tempValue" min="-20" max="50">
     </div>
-    <input type="range" id="temp" min="-20" max="50" value="26" oninput="updateValues()">
+    <input type="range" id="temp" min="-20" max="50" oninput="syncInput('temp')">
   </div>
 
   <!-- Füße im Pool -->
   <div class="card">
     <div class="label-row">
-      <label for="fuesse">Füße im Pool</label>
-      <span id="fuesseValue">5</span>
+      <label for="fuesseValue">Füße im Pool</label>
+      <input type="number" id="fuesseValue" min="0" max="40">
     </div>
-    <input type="range" id="fuesse" min="0" max="40" value="5" oninput="updateValues()">
+    <input type="range" id="fuesse" min="0" max="40" oninput="syncInput('fuesse')">
   </div>
 
   <!-- Liter im Pool -->
   <div class="card">
     <div class="label-row">
-      <label for="liter">Liter im Pool</label>
-      <span id="literValue">1000</span>
+      <label for="literValue">Liter im Pool</label>
+      <input type="number" id="literValue" min="0" max="100000">
     </div>
-    <input type="range" id="liter" min="0" max="50000" value="1000" oninput="updateValues()">
+    <input type="range" id="liter" min="0" max="100000" oninput="syncInput('liter')">
   </div>
 
   <!-- Trichteranzahl -->
   <div class="card">
     <div class="label-row">
-      <label for="trichter">Trichteranzahl</label>
-      <span id="trichterValue">3</span>
+      <label for="trichterValue">Trichtelanzahl</label>
+      <input type="number" id="trichterValue" min="0" max="100">
     </div>
-    <input type="range" id="trichter" min="0" max="100" value="3" oninput="updateValues()">
+    <input type="range" id="trichter" min="0" max="100" oninput="syncInput('trichter')">
   </div>
 
   <!-- Ergebnisse -->
@@ -100,20 +109,29 @@
 </div>
 
 <script>
-function updateValues() {
+function syncInput(id) {
+  let slider = document.getElementById(id);
+  let input = document.getElementById(id + "Value");
+  input.value = slider.value;
+  calculate();
+}
+
+function syncSlider(id) {
+  let slider = document.getElementById(id);
+  let input = document.getElementById(id + "Value");
+  if (parseFloat(input.value) > slider.max) input.value = slider.max;
+  if (parseFloat(input.value) < slider.min) input.value = slider.min;
+  slider.value = input.value;
+  calculate();
+}
+
+function calculate() {
   let hoehe = parseFloat(document.getElementById("hoehe").value);
   let alkohol = parseFloat(document.getElementById("alkohol").value);
   let temp = parseFloat(document.getElementById("temp").value);
   let fuesse = parseFloat(document.getElementById("fuesse").value);
   let liter = parseFloat(document.getElementById("liter").value);
   let trichter = parseFloat(document.getElementById("trichter").value);
-
-  document.getElementById("hoeheValue").textContent = hoehe;
-  document.getElementById("alkoholValue").textContent = alkohol;
-  document.getElementById("tempValue").textContent = temp;
-  document.getElementById("fuesseValue").textContent = fuesse;
-  document.getElementById("literValue").textContent = liter;
-  document.getElementById("trichterValue").textContent = trichter;
 
   let schmidlas = fuesse / (liter / 1000);
   schmidlas = Math.round(schmidlas * 100) / 100;
@@ -130,27 +148,42 @@ function updateValues() {
   document.getElementById("druck").textContent = druck.toFixed(2).replace('.', ',');
   document.getElementById("wurzelsepp").textContent = wurzelsepp.toFixed(2).replace('.', ',');
 
+  // Speichern in localStorage
+  localStorage.setItem("hoehe", hoehe);
+  localStorage.setItem("alkohol", alkohol);
+  localStorage.setItem("temp", temp);
+  localStorage.setItem("fuesse", fuesse);
+  localStorage.setItem("liter", liter);
+  localStorage.setItem("trichter", trichter);
   localStorage.setItem("wurzelsepp", wurzelsepp);
 }
 
 function goToVideo() {
-  localStorage.setItem("fuesse", document.getElementById("fuesse").value);
-  localStorage.setItem("liter", document.getElementById("liter").value);
-  localStorage.setItem("trichter", document.getElementById("trichter").value);
-  localStorage.setItem("hoehe", document.getElementById("hoehe").value);
-  localStorage.setItem("alkohol", document.getElementById("alkohol").value);
-  localStorage.setItem("temp", document.getElementById("temp").value);
   window.location.href = "autofahren.html";
 }
 
-// Trichtercounter aus counter.html laden
+// Beim Laden gespeicherte Werte setzen
 window.onload = function() {
+  let ids = ["hoehe","alkohol","temp","fuesse","liter","trichter"];
+  ids.forEach(id => {
+    let saved = localStorage.getItem(id);
+    let slider = document.getElementById(id);
+    let input = document.getElementById(id + "Value");
+    if (saved !== null) {
+      slider.value = saved;
+      input.value = saved;
+    } else {
+      input.value = slider.value;
+    }
+    input.oninput = () => syncSlider(id);
+  });
+
   let savedCounter = localStorage.getItem("trichterCounter") || 0;
   document.getElementById("stickyTrichter").textContent = savedCounter;
-  updateValues();
+
+  calculate();
 };
 </script>
 
 </body>
 </html>
-
