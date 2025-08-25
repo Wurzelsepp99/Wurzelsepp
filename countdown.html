@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1c2b3a;
+    color: #fff;
+  }
+  header {
+    background-color: #00bfff;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  nav {
+    display: flex;
+    justify-content: center;
+    background-color: #243547;
+    gap: 20px;
+    padding: 10px 0;
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  nav a:hover {
+    background-color: #00bfff;
+    color: #000;
+  }
+  .container {
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
+  }
+  .card {
+    background-color: #243547;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  }
+  .countdown-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #00bfff;
+  }
+  .countdown-time {
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<header>Countdown</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="counter.html">Trichtelcounter</a>
+  <a href="car.html">Auto fahren</a>
+  <a href="countdown.html">Countdown</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="countdown-title">⏳ Countdown bis zum Urlaub 🎉</div>
+    <div id="countdown" class="countdown-time">Lädt...</div>
+  </div>
+</div>
+
+<script>
+  // Nächstes Samstag 16 Uhr
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + (6 - targetDate.getDay() + 7) % 7); // nächster Samstag
+  targetDate.setHours(16,0,0,0);
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.getElementById("countdown").textContent = "Urlaub gestartet! 🎊";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").textContent =
+      `${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+
+</body>
+</html>
